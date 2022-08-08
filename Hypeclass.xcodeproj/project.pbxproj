@@ -71,6 +71,8 @@
 		C0C7B28728944044003FA2C2 /* AuthOnboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C7B28628944044003FA2C2 /* AuthOnboardViewController.swift */; };
 		C0C7B28928944395003FA2C2 /* CTAButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0C7B28828944395003FA2C2 /* CTAButton.swift */; };
 		C0CE2BDB289ACA37005EA4AD /* UIPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CE2BDA289ACA37005EA4AD /* UIPageViewController.swift */; };
+		C0CE2BDD289B95A3005EA4AD /* YoutubeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CE2BDC289B95A3005EA4AD /* YoutubeManager.swift */; };
+		C0D94B3528A0E29000659D52 /* Secret.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D94B3428A0E29000659D52 /* Secret.swift */; };
 		C0FD9C2E2898B9AB00D33C72 /* StudioEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0FD9C2D2898B9AB00D33C72 /* StudioEventViewController.swift */; };
 		C0FD9C302898BB9B00D33C72 /* StudioEventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0FD9C2F2898BB9B00D33C72 /* StudioEventCell.swift */; };
 		C0FD9C332899028800D33C72 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = C0FD9C322899028800D33C72 /* Kingfisher */; };
@@ -156,6 +158,8 @@
 		C0C7B28628944044003FA2C2 /* AuthOnboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthOnboardViewController.swift; sourceTree = "<group>"; };
 		C0C7B28828944395003FA2C2 /* CTAButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CTAButton.swift; sourceTree = "<group>"; };
 		C0CE2BDA289ACA37005EA4AD /* UIPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIPageViewController.swift; sourceTree = "<group>"; };
+		C0CE2BDC289B95A3005EA4AD /* YoutubeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeManager.swift; sourceTree = "<group>"; };
+		C0D94B3428A0E29000659D52 /* Secret.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secret.swift; sourceTree = "<group>"; };
 		C0FD9C2D2898B9AB00D33C72 /* StudioEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudioEventViewController.swift; sourceTree = "<group>"; };
 		C0FD9C2F2898BB9B00D33C72 /* StudioEventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudioEventCell.swift; sourceTree = "<group>"; };
 		C0FD9C342899182700D33C72 /* EventManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventManager.swift; sourceTree = "<group>"; };
@@ -277,6 +281,7 @@
 		C05BF1DE287BC79600C95E1B /* Config */ = {
 			isa = PBXGroup;
 			children = (
+				C0D94B3328A0E28300659D52 /* Secrets */,
 				C05BF1E0287BC7A300C95E1B /* Base */,
 				C05BF1DF287BC79D00C95E1B /* Font */,
 			);
@@ -342,6 +347,7 @@
 				C7CE67D6288FD30900C8F137 /* StudioManager.swift */,
 				A38A6E542890043B007982CF /* SearchManager.swift */,
 				C011CF4528940446001E6AD1 /* AuthManager.swift */,
+				C0CE2BDC289B95A3005EA4AD /* YoutubeManager.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -406,6 +412,14 @@
 				C0C445012894F0DF00036ADE /* AuthVerificationController.swift */,
 			);
 			path = Auth;
+			sourceTree = "<group>";
+		};
+		C0D94B3328A0E28300659D52 /* Secrets */ = {
+			isa = PBXGroup;
+			children = (
+				C0D94B3428A0E29000659D52 /* Secret.swift */,
+			);
+			path = Secrets;
 			sourceTree = "<group>";
 		};
 		C76C91CC2894504500703CCD /* Studio */ = {
@@ -549,6 +563,7 @@
 				A31C3F4428828B96005A6F6E /* SearchBar.swift in Sources */,
 				C07E5C8F287E6D9A00BDA46D /* Studio.swift in Sources */,
 				C7CE67AF2886F70700C8F137 /* ScheduleView.swift in Sources */,
+				C0CE2BDD289B95A3005EA4AD /* YoutubeManager.swift in Sources */,
 				C05BF1F1287BC7EF00C95E1B /* UIViewController.swift in Sources */,
 				C76C91C6289143C100703CCD /* ItemCell.swift in Sources */,
 				C05BF1FB287BC7EF00C95E1B /* UINavigationBar.swift in Sources */,
@@ -570,6 +585,7 @@
 				A37F02C7288842640027D3FC /* SearchDetailCell.swift in Sources */,
 				A3F1480D28882CA90025B822 /* UIImageView.swift in Sources */,
 				C039DCC0287D94630007951D /* SubscriptionViewController.swift in Sources */,
+				C0D94B3528A0E29000659D52 /* Secret.swift in Sources */,
 				C0402190287EBAB9009D9083 /* DancerService.swift in Sources */,
 				C05BF1F6287BC7EF00C95E1B /* UIApplication.swift in Sources */,
 				C0FD9C2E2898B9AB00D33C72 /* StudioEventViewController.swift in Sources */,
@@ -718,10 +734,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Hypeclass/Hypeclass.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 4DC5UF7YA9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Hypeclass/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "D:Light";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = LaunchScreen;
@@ -734,7 +751,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gongtae.Hypeclass;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -750,10 +767,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Hypeclass/Hypeclass.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 4DC5UF7YA9;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Hypeclass/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "D:Light";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = LaunchScreen;
@@ -766,7 +784,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.gongtae.Hypeclass;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
