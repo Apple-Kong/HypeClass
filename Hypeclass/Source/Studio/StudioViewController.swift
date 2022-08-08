@@ -274,7 +274,7 @@ class StudioViewController: BaseViewController {
         vc.model = studio
         vc.view.tag = 2
         viewControllers.append(vc)
-        pageViewController.view.heightAnchor.constraint(equalToConstant: vc.view.frame.height).isActive = true
+        pageViewController.view.heightAnchor.constraint(equalToConstant: 1500).isActive = true
         
         if let firstVC = viewControllers.first {
             pageViewController.setViewControllers([firstVC], direction: .forward, animated: true, completion: nil)

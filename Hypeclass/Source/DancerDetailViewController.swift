@@ -12,6 +12,7 @@ class DancerDetailViewController: BaseViewController {
     //MARK: - Properties
     
     var model: Dancer?
+    var recentVideos: [Item]?
     
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -74,6 +75,15 @@ class DancerDetailViewController: BaseViewController {
         return label
     }()
     
+    private let recentVideoTable: UITableView = {
+        let tableView = UITableView()
+        tableView.rowHeight = 300
+        tableView.backgroundColor = .clear
+        tableView.isScrollEnabled = false
+        
+        return tableView
+    }()
+    
     private lazy var introduceContentLabel: UILabel = {
         let label = UILabel()
         label.text = "소개"
@@ -100,11 +110,14 @@ class DancerDetailViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        configurerecentVideoTable()
+        requestYoutube()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: animated)
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -146,6 +159,26 @@ class DancerDetailViewController: BaseViewController {
     }
     
     //MARK: - Helpers
+    
+    func requestYoutube() {
+        YoutubeManager.shared.fetchYoutubeData(channelID: "UC_9VndUJ6Z6yfEK4_EJI46Q") { result in
+            switch result {
+            case .success(let thumbnailDatas):
+                self.recentVideos = thumbnailDatas
+                DispatchQueue.main.async {
+                    self.recentVideoTable.reloadData()
+                }
+            case .failure(let error):
+                print("ERROR: \(error)")
+            }
+        }
+    }
+    
+    func configurerecentVideoTable() {
+        recentVideoTable.register(RecentVideoCell.self, forCellReuseIdentifier: RecentVideoCell.recentVideoCellID)
+        recentVideoTable.dataSource = self
+        recentVideoTable.delegate = self
+    }
 
     private func configureUI() {
         // scrollView
@@ -164,6 +197,7 @@ class DancerDetailViewController: BaseViewController {
         contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor).isActive = true
         contentView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor).isActive = true
         contentView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor).isActive = true
+       
         contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
 
         let contentViewHeight = contentView.heightAnchor.constraint(greaterThanOrEqualTo: view.heightAnchor)
@@ -203,11 +237,27 @@ class DancerDetailViewController: BaseViewController {
         dancerHeaderView!.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
         dancerHeaderView!.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
         
+        // introduceContentLabel
+        contentView.addSubview(introduceContentLabel)
+        introduceContentLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            introduceContentLabel.topAnchor.constraint(equalTo: dancerHeaderView!.bottomAnchor),
+            introduceContentLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 25)
+        ])
+        
+        // introduceContent
+        contentView.addSubview(introduceContent)
+        introduceContent.translatesAutoresizingMaskIntoConstraints = false
+        introduceContent.topAnchor.constraint(equalTo: introduceContentLabel.bottomAnchor, constant: 15).isActive = true
+        introduceContent.leadingAnchor.constraint(equalTo: introduceContentLabel.leadingAnchor).isActive = true
+        
         // scheduleContentLabel
         contentView.addSubview(scheduleContentLabel)
         scheduleContentLabel.translatesAutoresizingMaskIntoConstraints = false
-        scheduleContentLabel.topAnchor.constraint(equalTo: dancerHeaderView!.bottomAnchor).isActive = true
-        scheduleContentLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 25).isActive = true
+        NSLayoutConstraint.activate([
+            scheduleContentLabel.topAnchor.constraint(equalTo: introduceContent.bottomAnchor, constant: 30),
+            scheduleContentLabel.leadingAnchor.constraint(equalTo: introduceContent.leadingAnchor)
+        ])
         
         if model?.id != nil {
             // scheduleView
@@ -223,20 +273,20 @@ class DancerDetailViewController: BaseViewController {
         // videoContentLabel
         contentView.addSubview(videoContentLabel)
         videoContentLabel.translatesAutoresizingMaskIntoConstraints = false
-        videoContentLabel.topAnchor.constraint(equalTo: scheduleView?.bottomAnchor ?? scheduleContentLabel.bottomAnchor, constant: 20).isActive = true
-        videoContentLabel.leadingAnchor.constraint(equalTo: scheduleContentLabel.leadingAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            videoContentLabel.topAnchor.constraint(equalTo: scheduleView?.bottomAnchor ?? scheduleContentLabel.bottomAnchor, constant: 20),
+            videoContentLabel.leadingAnchor.constraint(equalTo: scheduleContentLabel.leadingAnchor)
+        ])
         
-        // introduceContentLabel
-        contentView.addSubview(introduceContentLabel)
-        introduceContentLabel.translatesAutoresizingMaskIntoConstraints = false
-        introduceContentLabel.topAnchor.constraint(equalTo: videoContentLabel.bottomAnchor, constant: 20).isActive = true
-        introduceContentLabel.leadingAnchor.constraint(equalTo: scheduleContentLabel.leadingAnchor).isActive = true
-        
-        // introduceContent
-        contentView.addSubview(introduceContent)
-        introduceContent.translatesAutoresizingMaskIntoConstraints = false
-        introduceContent.topAnchor.constraint(equalTo: introduceContentLabel.bottomAnchor, constant: 15).isActive = true
-        introduceContent.leadingAnchor.constraint(equalTo: scheduleContentLabel.leadingAnchor).isActive = true
+        contentView.addSubview(recentVideoTable)
+        recentVideoTable.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            recentVideoTable.topAnchor.constraint(equalTo: videoContentLabel.bottomAnchor, constant: 20),
+            recentVideoTable.leadingAnchor.constraint(equalTo: videoContentLabel.leadingAnchor),
+            recentVideoTable.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -25),
+            recentVideoTable.heightAnchor.constraint(equalToConstant: 1500),
+            contentView.bottomAnchor.constraint(equalTo: recentVideoTable.bottomAnchor)
+        ])
     }
     
     private func isAlreadySubscribed() -> Bool {
@@ -274,6 +324,36 @@ class DancerDetailViewController: BaseViewController {
         let subscriptions = UserDefaults.standard.stringArray(forKey: "SubscribedDancers")!.filter { $0 != model!.id }
         UserDefaults.standard.set(subscriptions, forKey: "SubscribedDancers")
         DancerManager.myDancers = DancerManager.myDancers?.filter{ $0.id != model!.id }
+    }
+}
+
+//MARK: - UITableViewDataSource
+
+extension DancerDetailViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return recentVideos?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = recentVideoTable.dequeueReusableCell(withIdentifier: RecentVideoCell.recentVideoCellID, for:indexPath) as! RecentVideoCell
+        guard let youtubeItem = recentVideos?[indexPath.row] else { return cell }
+        let url = URL(string: youtubeItem.snippet.thumbnails.high.url)
+        cell.videoThumbnail.kf.setImage(with: url)
+        cell.titleLabel.text = youtubeItem.snippet.title
+        cell.selectionStyle = .none
+        return cell
+    }
+}
+
+//MARK: - UITableViewDelegate
+
+extension DancerDetailViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let youtubeItem = recentVideos?[indexPath.row] else { return }
+        let videoID = youtubeItem.id.videoID
+        if let url = URL(string: "https://www.youtube.com/watch?v=\(videoID)") {
+            UIApplication.shared.open(url, options: [:])
+        }
     }
 }
 

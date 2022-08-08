@@ -19,14 +19,24 @@ class RecentVideoCell: UITableViewCell {
         return image
     }()
     
-    private let videoThumbnail: UIImageView = {
+    let videoThumbnail: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleToFill
         imageView.backgroundColor = .gray
         imageView.layer.cornerRadius = 8
         imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
         
         return imageView
+    }()
+    
+    let titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.text = "유튜브 동영상 이름"
+        label.textColor = .white
+        
+        return label
     }()
 
     static let recentVideoCellID = "RecentVideoCell"
@@ -34,6 +44,7 @@ class RecentVideoCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureUI()
+        backgroundColor = .clear
     }
     
     required init?(coder:NSCoder) {
@@ -43,13 +54,24 @@ class RecentVideoCell: UITableViewCell {
     func configureUI() {
         contentView.addSubview(videoThumbnail)
         videoThumbnail.translatesAutoresizingMaskIntoConstraints = false
-        videoThumbnail.heightAnchor.constraint(equalToConstant: 159.38).isActive = true
-        videoThumbnail.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
-        videoThumbnail.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            videoThumbnail.topAnchor.constraint(equalTo: contentView.topAnchor),
+            videoThumbnail.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            videoThumbnail.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            videoThumbnail.heightAnchor.constraint(equalToConstant: 240)
+        ])
         
         videoThumbnail.addSubview(playImage)
         playImage.translatesAutoresizingMaskIntoConstraints = false
         playImage.topAnchor.constraint(equalTo: videoThumbnail.topAnchor, constant: 15.96).isActive = true
         playImage.trailingAnchor.constraint(equalTo: videoThumbnail.trailingAnchor, constant: -19.23).isActive = true
+        
+        contentView.addSubview(titleLabel)
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: videoThumbnail.bottomAnchor, constant: 10),
+            titleLabel.leadingAnchor.constraint(equalTo: videoThumbnail.leadingAnchor),
+            titleLabel.trailingAnchor.constraint(equalTo: videoThumbnail.trailingAnchor)
+        ])
     }
 }

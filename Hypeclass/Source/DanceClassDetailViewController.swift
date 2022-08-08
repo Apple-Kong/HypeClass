@@ -7,6 +7,7 @@
 
 import UIKit
 import Kingfisher
+import FirebaseAuth
 
 class DanceClassDetailViewController: BaseViewController {
     
@@ -119,6 +120,7 @@ class DanceClassDetailViewController: BaseViewController {
             // 로그인 되어 있을 시 신청 메서드 작동
             presentAlert(title: "신청하기", message: "신청 후에는 취소, 수강관련안내 문자가 회원님의 핸드폰 번호로 전송됩니다", isCancelActionIncluded: true, preferredStyle: .alert) { action in
                 print("DEUBG: 신청하기 로직 연결 필요")
+                self.notionCall()
                 self.presentBottomAlert(message: "신청이 완료되었습니다.")
             }
         } else {
@@ -129,6 +131,58 @@ class DanceClassDetailViewController: BaseViewController {
     }
     
     //MARK: - Helpers
+    private func notionCall() {
+        let headers: [String: String] = [
+//            "Accept": "application/json",
+            "Notion-Version": "2022-06-28",
+            "Content-Type": "application/json",
+            "Authorization": "secret_AvjFT0QUYY5SQpjxIJ2VNBqMcxWFfFcAFmg2KeUh2Hk"
+        ]
+        
+        let request = NSMutableURLRequest(url: NSURL(string: "https://api.notion.com/v1/pages")! as URL,
+                                                cachePolicy: .useProtocolCachePolicy,
+                                            timeoutInterval: 10.0)
+        request.httpMethod = "POST"
+        request.allHTTPHeaderFields = headers
+        request.httpBody = """
+            {
+                "parent": {
+                    "database_id": "4b48a3ceee304cc987054fe45613f60d"
+                },
+                "properties": {
+                    "Name": {
+                        "title": [
+                            {
+                                "text": {
+                                    "content": "\(AuthManager.shared.userName ?? "")"
+                                }
+                            }
+                        ]
+                    },
+                    "isPayed": {
+                        "checkbox": false
+                    }
+                }
+            }
+        """.data(using: .utf8)
+
+        let session = URLSession.shared
+        let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
+            print(error.debugDescription)
+            print(response.debugDescription)
+            print(data?.debugDescription)
+          if (error != nil) {
+              print(error.debugDescription)
+         
+          } else {
+            let httpResponse = response as? HTTPURLResponse
+              print(httpResponse.debugDescription)
+          }
+        })
+
+        dataTask.resume()
+        
+    }
     
     func configure() {
         guard let model = model else { return }

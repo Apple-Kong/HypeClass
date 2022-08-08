@@ -220,7 +220,7 @@ extension SubscriptionViewController: UITableViewDelegate, UITableViewDataSource
             let studio = StudioManager.myStudios?[indexPath.row]
             cell.titleLabel.text = studio?.name
             cell.subtitleLabel.text = studio?.location
-            cell.detailLabel.text = studio?.description
+//            cell.detailLabel.text = studio?.description
             if studio?.profileImageURL != nil { cell.profileImage.kf.setImage(with: URL(string: (studio?.profileImageURL)!)) }
             cell.backgroundColor = .clear            
             return cell

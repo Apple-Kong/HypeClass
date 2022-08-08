@@ -15,6 +15,7 @@ class IntroduceViewController: BaseViewController {
     // 데이터 연결 되면 PR 올라오면 데이터 받아서 처리 ( 샘플 코드 )
     var model: Studio?
     private var instrutors: [Dancer]?
+    private var youtubeItems: [Item]?
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -69,7 +70,7 @@ class IntroduceViewController: BaseViewController {
     
     private let recentVideoTable: UITableView = {
         let tableView = UITableView()
-        tableView.rowHeight = 180
+        tableView.rowHeight = 300
         tableView.backgroundColor = .clear
         tableView.isScrollEnabled = false
         
@@ -90,6 +91,7 @@ class IntroduceViewController: BaseViewController {
         super.viewWillAppear(animated)
         instructorsCollection.reloadData()
         recentVideoTable.reloadData()
+        requestYoutube()
     }
     
     //MARK: - Selectors
@@ -112,6 +114,20 @@ class IntroduceViewController: BaseViewController {
                 instructorsCollection.reloadData()
             }
             recentVideoTable.reloadData()
+        }
+    }
+    
+    func requestYoutube() {
+        YoutubeManager.shared.fetchYoutubeData(channelID: "UC_9VndUJ6Z6yfEK4_EJI46Q") { result in
+            switch result {
+            case .success(let thumbnailDatas):
+                self.youtubeItems = thumbnailDatas
+                DispatchQueue.main.async {
+                    self.recentVideoTable.reloadData()
+                }
+            case .failure(let error):
+                print("ERROR: \(error)")
+            }
         }
     }
     
@@ -149,7 +165,7 @@ class IntroduceViewController: BaseViewController {
         recentVideoTable.translatesAutoresizingMaskIntoConstraints = false
         recentVideoTable.topAnchor.constraint(equalTo: recentVideoLabel.bottomAnchor, constant: 14).isActive = true
         recentVideoTable.leadingAnchor.constraint(equalTo: introduceLabel.leadingAnchor).isActive = true
-        recentVideoTable.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -11).isActive = true
+        recentVideoTable.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25).isActive = true
         recentVideoTable.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
@@ -196,17 +212,27 @@ extension IntroduceViewController: UICollectionViewDataSource {
 //MARK: - UITableView Extension
 
 extension IntroduceViewController: UITableViewDelegate {
-    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let youtubeItem = youtubeItems?[indexPath.row] else { return }
+        let videoID = youtubeItem.id.videoID
+        if let url = URL(string: "https://www.youtube.com/watch?v=\(videoID)") {
+            UIApplication.shared.open(url, options: [:])
+        }
+    }
 }
 
 extension IntroduceViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return youtubeItems?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = recentVideoTable.dequeueReusableCell(withIdentifier: RecentVideoCell.recentVideoCellID, for:indexPath) as! RecentVideoCell
-        
+        guard let youtubeItem = youtubeItems?[indexPath.row] else { return cell }
+        let url = URL(string: youtubeItem.snippet.thumbnails.high.url)
+        cell.videoThumbnail.kf.setImage(with: url)
+        cell.titleLabel.text = youtubeItem.snippet.title
+        cell.selectionStyle = .none
         return cell
     }
 }
